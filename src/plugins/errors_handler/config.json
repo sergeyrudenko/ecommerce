@@ -1,0 +1,12 @@
+{
+  "errors": {
+    "1": { "code": 1, "entity": "user", "hint": "call to developer" },
+    "102": { "code": 102, "entity": "user", "hint": "uncorrect validation" },
+    "2": { "code": 2, "entity": "user", "hint": "call to developer" },
+    "3": { "code": 3, "entity": "user", "hint": "call to developer" },
+    "4": { "code": 4, "entity": "user", "hint": "call to developer" },
+    "5": { "code": 5, "entity": "user", "hint": "call to developer" },
+    "401": { "code": 401, "entity": "any", "hint": "check input data" },
+    "404": { "code": 404, "entity": "any", "hint": "check for correct id" }
+  }
+}

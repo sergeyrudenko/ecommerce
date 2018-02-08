@@ -1,0 +1,15 @@
+{
+
+  "name": "JsBerry",
+  "mode": "prod",
+  "logs": "logs",
+  "clear_logs_time": "86400000",
+  "sms_service": "twillio",
+  "framework": "express",
+  "dir": {
+    "modules": "modules",
+    "plugins": "plugins",
+    "public": "public"
+  }
+
+}
