@@ -59,14 +59,9 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(goods_get, async ({ params, headers }) => {
     try {
 
-      if(headers.authCheck){
-
         const response = await ACTIONS.send('database.read', { model, payload: {id: params.id} });
         return response;
         
-      } else {
-        return Promise.reject( 'AuthError' );
-      }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
@@ -87,16 +82,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    */
 
   ACTIONS.on(goods_getAll, async ({ params, headers }) => {
-    try {
-
-      if(headers.authCheck){
+    try {      
 
         const response = await ACTIONS.send('database.read', { model, payload: {} });
         return response;
-        
-      } else {
-        return Promise.reject( 'AuthError' );
-      }
+    
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
