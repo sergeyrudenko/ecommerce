@@ -5,6 +5,8 @@ UserSchema = mongoose.Schema ({
   login: { type: String, default: '' },
   password: { type: String, default: '' },
   token: { type: String, default: 0 },
+  email: { type: String, default: '' },
+  permissions: { type: String, default: 'user' },  
 }, { versionKey: false });
 
 

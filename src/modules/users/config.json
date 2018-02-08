@@ -4,6 +4,7 @@
   "routes": {
     "users_auth": { "path": "users/auth", "method": "get" },
     "users_get": { "path": "users/get/:id", "method": "get" },
+    "users_getAll": { "path": "users/get/all", "method": "get" },
     "users_create": { "path": "users/create", "method": "post" },
     "users_update": { "path": "users/update/:id", "method": "put" },
     "users_delete": { "path": "users/delete/:id", "method": "delete" }

@@ -1,6 +1,6 @@
 const { routes } = require('./config.json');
 const uuid = require('uuid');
-const model = require('./userSchema.js');
+const model = require('./goodsSchema.js');
 const validCheck = require ('./validation.js');
 const authCheck = require ('./authorization.js');
 
@@ -12,7 +12,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *****************************************
    */
 
-  const { users_auth, users_get, users_create, users_update, users_delete, users_getAll } = utils.convertkeysToDots(routes);
+  const { goods_auth, goods_get, goods_create, goods_update, goods_delete, goods_getAll } = utils.convertkeysToDots(routes);
 
   /**
    *************************************
@@ -33,7 +33,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_auth, ({ headers, query, body }) => {
+  ACTIONS.on(goods_auth, ({  query, body, headers }) => {
 
 
     const response = { name: 'John', surname: 'Dou' };
@@ -56,7 +56,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_get, async ({ params, headers }) => {
+  ACTIONS.on(goods_get, async ({ params, headers }) => {
     try {
 
       if(headers.authCheck){
@@ -74,10 +74,9 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
   });  
 
-
-  /**
+   /**
    ************************************
-   * SUBSCRIBE TO GET ALL USERS*
+   * SUBSCRIBE TO GET ALL GOODS*
    ************************************
    *
    * @param  {object} headers - http headers
@@ -87,7 +86,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_getAll, async ({ params, headers }) => {
+  ACTIONS.on(goods_getAll, async ({ params, headers }) => {
     try {
 
       if(headers.authCheck){
@@ -117,12 +116,13 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-   ACTIONS.on(users_create, async ({ body, headers }) => {
+   ACTIONS.on(goods_create, async ({ body, headers }) => {
     try {
     
       if(headers.validCheck){
        
-        const response = await ACTIONS.send('database.create', { model, payload: { login: body.login, password: body.password, id: uuid(), token: uuid()} });
+        const response = await ACTIONS.send('database.create', 
+          { model, payload: { name: body.name, price: body.price, id: uuid(), description: body.description, characteristics: body.characteristics } });
         return response;
 
       } else {
@@ -147,12 +147,13 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_update, async ({ params, body, headers }) => {
+  ACTIONS.on(goods_update, async ({ params, body, headers }) => {
     try {
 
       if(headers.validCheck && headers.authCheck){
 
-        const response = await ACTIONS.send('database.update', { model, payload: { id: params.id, login: body.login, password: body.password } });
+        const response = await ACTIONS.send('database.update', 
+          { model, payload: { name: body.name, price: body.price, id: params.id, description: body.description, characteristics: body.characteristics } });
         return response;
 
       } else {
@@ -178,7 +179,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_delete, async ({ params, headers }) => {
+  ACTIONS.on(goods_delete, async ({ params, headers }) => {
     try {
 
       if( headers.authCheck ){
