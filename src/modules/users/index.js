@@ -1,8 +1,8 @@
 const { routes } = require('./config.json');
 const uuid = require('uuid');
 const model = require('./userSchema.js');
-const validCheck = require ('./validation.js');
-const authCheck = require ('./authorization.js');
+const usersValidCheck = require ('./validation.js');
+const usersAuthCheck = require ('./authorization.js');
 
 module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
@@ -12,7 +12,24 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *****************************************
    */
 
-  const { users_auth, users_get, users_create, users_update, users_delete, users_getAll } = utils.convertkeysToDots(routes);
+  const { users_auth,
+          users_get,
+          users_create,
+          users_update,
+          users_delete,
+          users_getAll } = utils.convertkeysToDots(routes);
+
+    /**
+   ***************************
+   * SET MIDDLEWARES *
+   ***************************
+   *const firstMidleware = (req, res) => {};
+   *const secondMidleware = (req, res) => {};
+   *
+   * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
+   */
+   // ROUTER.set('middlewares', { usersAuthCheck, usersValidCheck });
+   ROUTER.set('middlewares', { usersValidCheck: usersValidCheck(utils), usersAuthCheck: usersAuthCheck(ACTIONS, utils) });
 
   /**
    *************************************
@@ -61,9 +78,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(headers.authCheck){
 
-        const response = await ACTIONS.send('database.read', { model, payload: {id: params.id} });
+        const settings = { model, payload: {id: params.id} };
+        const response = await ACTIONS.send('database.read', settings);
         return response;
-        
+
       } else {
         return Promise.reject( 'AuthError' );
       }
@@ -72,7 +90,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     }
 
 
-  });  
+  });
 
 
   /**
@@ -92,9 +110,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(headers.authCheck){
 
-        const response = await ACTIONS.send('database.read', { model, payload: {} });
+        const settings = { model, payload: {} };
+        const response = await ACTIONS.send('database.read', settings);
         return response;
-        
+
       } else {
         return Promise.reject( 'AuthError' );
       }
@@ -103,7 +122,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     }
 
 
-  }); 
+  });
 
   /**
    ************************************
@@ -119,21 +138,28 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
    ACTIONS.on(users_create, async ({ body, headers }) => {
     try {
-    
-      if(headers.validCheck){
-       
-        const response = await ACTIONS.send('database.create', { model, payload: { login: body.login, password: body.password, id: uuid(), token: uuid()} });
+      console.log(headers.validCheck,'create');
+      if( headers.validCheck ){
+
+      const settings = { model, payload: {
+          login: body.login,
+          password: body.password,
+          id: uuid(),
+          token: uuid()
+        }
+      };
+        const response = await ACTIONS.send('database.create', settings);
         return response;
 
       } else {
-        return Promise.reject( 'ValidError' );
+        return Promise.reject( 'Validation error!' );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
 
 
-  }); 
+  });
 
   /**
    ************************************
@@ -152,7 +178,12 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(headers.validCheck && headers.authCheck){
 
-        const response = await ACTIONS.send('database.update', { model, payload: { id: params.id, login: body.login, password: body.password } });
+        const settings = { model, payload: {
+          id: params.id,
+          login: body.login,
+          password: body.password }
+      };
+        const response = await ACTIONS.send('database.update', settings);
         return response;
 
       } else {
@@ -164,7 +195,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     }
 
 
-  });  
+  });
 
   /**
    ************************************
@@ -183,7 +214,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if( headers.authCheck ){
 
-        const response = await ACTIONS.send('database.delete', { model, payload: { id: params.id } });
+        const settings = { model, payload: { id: params.id } };
+        const response = await ACTIONS.send('database.delete', );
         return response;
 
       } else {
@@ -196,23 +228,6 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
 
   });
-
-
-
-  /**
-   ***************************
-   * SET MIDDLEWARES *
-   ***************************
-   *const firstMidleware = (req, res) => {};
-   *const secondMidleware = (req, res) => {};
-   *
-   * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
-   */
-   ROUTER.set('middlewares', { authCheck, validCheck });
-
-
-
-
 
   /**
    ***************************

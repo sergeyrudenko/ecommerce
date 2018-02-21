@@ -80,7 +80,7 @@ module.exports = ({ ACTIONS, ROUTER }) => {
 
     });
 
-  });  
+  });
 
    /**
    * Configure middleware plugins
@@ -101,7 +101,7 @@ module.exports = ({ ACTIONS, ROUTER }) => {
   /**
    * Connect api routing to modules
    */
-   
+
   ACTIONS.on('api.routes', () => {
 
     for (let _route in ROUTER.routes) {

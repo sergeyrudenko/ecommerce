@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-GoodsSchema = mongoose.Schema ({
+GoodsSchema = mongoose.Schema({
   id: { type: String, default: 0 },
   price: { type: Number, default: 0 },
   name: { type: String, default: 'Unnamed article' },

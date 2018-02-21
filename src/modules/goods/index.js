@@ -1,8 +1,7 @@
 const { routes } = require('./config.json');
 const uuid = require('uuid');
 const model = require('./goodsSchema.js');
-const validCheck = require ('./validation.js');
-const authCheck = require ('./authorization.js');
+const goodsValidCheck = require ('./validation.js');
 
 module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
@@ -12,7 +11,22 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *****************************************
    */
 
-  const { goods_auth, goods_get, goods_create, goods_update, goods_delete, goods_getAll } = utils.convertkeysToDots(routes);
+   const { goods_auth,
+           goods_get,
+           goods_create,
+           goods_update,
+           goods_delete,
+           goods_getAll } = utils.convertkeysToDots(routes);
+    /**
+   ***************************
+   * SET MIDDLEWARES *
+   ***************************
+   *const firstMidleware = (req, res) => {};
+   *const secondMidleware = (req, res) => {};
+   *
+   * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
+   */
+   ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
 
   /**
    *************************************
@@ -22,8 +36,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
   ROUTER.routes = Object.assign(ROUTER.routes, routes);
 
-  /**
-   ************************************
+
+   /************************************
    * SUBSCRIBE TO USERS AUTHORIZATION *
    ************************************
    *
@@ -59,15 +73,16 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(goods_get, async ({ params, headers }) => {
     try {
 
-        const response = await ACTIONS.send('database.read', { model, payload: {id: params.id} });
+        const settings = { model, payload: { id: params.id } };
+        const response = await ACTIONS.send('database.read', settings );
         return response;
-        
+
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
 
 
-  });  
+  });
 
    /**
    ************************************
@@ -82,17 +97,18 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    */
 
   ACTIONS.on(goods_getAll, async ({ params, headers }) => {
-    try {      
+    try {
 
-        const response = await ACTIONS.send('database.read', { model, payload: {} });
+        const settings = { model, payload: { id: params.id } };
+        const response = await ACTIONS.send('database.read', settings );
         return response;
-    
+
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
 
 
-  }); 
+  });
 
   /**
    ************************************
@@ -108,11 +124,17 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
    ACTIONS.on(goods_create, async ({ body, headers }) => {
     try {
-    
-      if(headers.validCheck){
-       
-        const response = await ACTIONS.send('database.create', 
-          { model, payload: { name: body.name, price: body.price, id: uuid(), description: body.description, characteristics: body.characteristics } });
+
+      if( headers.validCheck ){
+
+        const settings = {  model, payload: {
+          name: body.name,
+          price: body.price,
+          id: uuid(),
+          description: body.description,
+          characteristics: body.characteristics
+        }};
+        const response = await ACTIONS.send('database.create', settings );
         return response;
 
       } else {
@@ -123,7 +145,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     }
 
 
-  }); 
+  });
 
   /**
    ************************************
@@ -142,8 +164,14 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(headers.validCheck && headers.authCheck){
 
-        const response = await ACTIONS.send('database.update', 
-          { model, payload: { name: body.name, price: body.price, id: params.id, description: body.description, characteristics: body.characteristics } });
+        const settings = { model, payload: {
+          name: body.name,
+          price: body.price,
+          id: params.id,
+          description: body.description,
+          characteristics: body.characteristics
+        }};
+        const response = await ACTIONS.send('database.update', settings );
         return response;
 
       } else {
@@ -155,7 +183,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     }
 
 
-  });  
+  });
 
   /**
    ************************************
@@ -174,7 +202,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if( headers.authCheck ){
 
-        const response = await ACTIONS.send('database.delete', { model, payload: { id: params.id } });
+        const settings = { model, payload: { id: params.id } };
+        const response = await ACTIONS.send('database.delete', settings );
         return response;
 
       } else {
@@ -187,23 +216,6 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
 
   });
-
-
-
-  /**
-   ***************************
-   * SET MIDDLEWARES *
-   ***************************
-   *const firstMidleware = (req, res) => {};
-   *const secondMidleware = (req, res) => {};
-   *
-   * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
-   */
-   ROUTER.set('middlewares', { authCheck, validCheck });
-
-
-
-
 
   /**
    ***************************

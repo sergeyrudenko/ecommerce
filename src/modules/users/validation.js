@@ -1,26 +1,21 @@
 
-module.exports = function (req, res, next)  {
-	
-	if(req.method == 'POST' || req.method == 'PUT'){
-	
-		const fields = [
-		  { name: 'login', mask: /^[a-z0-9_-]{5,15}$/g },
-		  { name: 'password', mask: /^[A-Za-z0-9_-]{8,15}$/g }
-		];
-		req.headers.validCheck = true;
+module.exports = (utils) => {
 
-		fields.forEach((field) => {
+  return (req, res, next) => {
 
-			if ( !field.mask.test(req.body[field.name]) ){req.headers.validCheck = false;}			
+    const checkModule = (req.url.indexOf('users') !==-1);
+    if (req.method == 'POST' || req.method == 'PUT' && checkModule ) {
 
-		});
+      const fields = [
+        { name: 'login', mask: /^[a-z0-9_-]{5,15}$/g },
+        { name: 'password', mask: /^[A-Za-z0-9_-]{8,15}$/g },
+      ];
+      req.headers.validCheck = utils.validateFields(req.body, fields);
+      console.log(req.headers.validCheck, 'valid');
+    }
+    next();
+    return req.headers.validCheck;
 
-		next();
-		return req.headers.validCheck;
-
-	}
-
-	next();
-	return;
+  };
 
 };
