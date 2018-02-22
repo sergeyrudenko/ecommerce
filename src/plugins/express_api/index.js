@@ -115,13 +115,32 @@ module.exports = ({ ACTIONS, ROUTER }) => {
 
         ACTIONS.send(_route.replace('_', '.'), props)
           .then((data) => res.send(data))
-          .catch((error) => next(error));
+          .catch((error) => {
+
+            res.send({ error: error.message });
+
+          });
 
       });
 
     }
 
   });
+
+  /**
+   * Create server and listen port
+   */
+
+  ACTIONS.on('api.handle.errors', () => {
+
+    app.use((error, req, res, next) => {
+
+      console.log(809080);
+
+    });
+
+  });
+
 
   /**
    * Create server and listen port

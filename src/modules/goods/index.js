@@ -26,7 +26,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-   ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
+   // ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
 
   /**
    *************************************
@@ -99,8 +99,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(goods_getAll, async ({ params, headers }) => {
     try {
 
-        const settings = { model, payload: { id: params.id } };
-        const response = await ACTIONS.send('database.read', settings );
+        const settings = { model, payload: {} };
+        const response = await ACTIONS.send('database.readAll', settings );
         return response;
 
     } catch(error) {
@@ -132,7 +132,12 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
           price: body.price,
           id: uuid(),
           description: body.description,
-          characteristics: body.characteristics
+          characteristics: body.characteristics,
+          sale: body.sale,
+          gift: body.gift,
+          rating: body.rating,
+          reviews: body.reviews,
+          customFields: body.customFields,
         }};
         const response = await ACTIONS.send('database.create', settings );
         return response;
@@ -164,12 +169,17 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(headers.validCheck && headers.authCheck){
 
-        const settings = { model, payload: {
+       const settings = {  model, payload: {
           name: body.name,
           price: body.price,
-          id: params.id,
+          id: body.id,
           description: body.description,
-          characteristics: body.characteristics
+          characteristics: body.characteristics,
+          sale: body.sale,
+          gift: body.gift,
+          rating: body.rating,
+          reviews: body.reviews,
+          customFields: body.customFields,
         }};
         const response = await ACTIONS.send('database.update', settings );
         return response;

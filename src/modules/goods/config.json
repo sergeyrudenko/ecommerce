@@ -4,7 +4,7 @@
   "routes": {
     "goods_auth": { "path": "goods/auth", "method": "get" },
     "goods_get": { "path": "goods/get/:id", "method": "get" },
-    "goods_getAll": { "path": "goods/get/all", "method": "get" },
+    "goods_getAll": { "path": "goods/all", "method": "get" },
     "goods_create": { "path": "goods/create", "method": "post" },
     "goods_update": { "path": "goods/update/:id", "method": "put" },
     "goods_delete": { "path": "goods/delete/:id", "method": "delete" }

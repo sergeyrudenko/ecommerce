@@ -28,8 +28,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-   // ROUTER.set('middlewares', { usersAuthCheck, usersValidCheck });
-   ROUTER.set('middlewares', { usersValidCheck: usersValidCheck(utils), usersAuthCheck: usersAuthCheck(ACTIONS, utils) });
+  //  ROUTER.set('middlewares', {
+  //   usersValidCheck: usersValidCheck(utils),
+  //   usersAuthCheck: usersAuthCheck(ACTIONS)
+  // });
 
   /**
    *************************************
@@ -73,15 +75,12 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_get, async ({ params, headers }) => {
+  ACTIONS.on(users_get, ({ params, headers }) => {
     try {
 
       if(headers.authCheck){
-
         const settings = { model, payload: {id: params.id} };
-        const response = await ACTIONS.send('database.read', settings);
-        return response;
-
+        return ACTIONS.send('database.read', settings);
       } else {
         return Promise.reject( 'AuthError' );
       }
@@ -105,24 +104,25 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(users_getAll, async ({ params, headers }) => {
-    try {
+  // ACTIONS.on(users_getAll, async ({ params, headers }) => {
+  //   try {
+  //     console.log('all123');
+  //     if(headers.authCheck){
 
-      if(headers.authCheck){
+  //       const settings = { model, payload: {} };
+  //       const response = await ACTIONS.send('database.readAll', settings);
+  //       console.log(response);
+  //       console.log('all');
+  //       return response;
 
-        const settings = { model, payload: {} };
-        const response = await ACTIONS.send('database.read', settings);
-        return response;
+  //     } else {
+  //       return Promise.reject( 'AuthErrorALL' );
+  //     }
+  //   } catch(error) {
+  //     Promise.reject({ details: error.message, code: 101 })
+  //   }
 
-      } else {
-        return Promise.reject( 'AuthError' );
-      }
-    } catch(error) {
-      Promise.reject({ details: error.message, code: 101 })
-    }
-
-
-  });
+  // });
 
   /**
    ************************************
@@ -138,12 +138,14 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
    ACTIONS.on(users_create, async ({ body, headers }) => {
     try {
-      console.log(headers.validCheck,'create');
+
       if( headers.validCheck ){
 
       const settings = { model, payload: {
           login: body.login,
           password: body.password,
+          email: body.email,
+          permissions: body.permissions,
           id: uuid(),
           token: uuid()
         }
@@ -181,8 +183,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         const settings = { model, payload: {
           id: params.id,
           login: body.login,
-          password: body.password }
-      };
+          password: body.password,
+          email: body.email,
+          permissions: body.permissions
+          }
+        };
         const response = await ACTIONS.send('database.update', settings);
         return response;
 
