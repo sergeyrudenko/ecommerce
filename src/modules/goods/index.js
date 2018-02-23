@@ -26,7 +26,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-   // ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
+   ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
 
   /**
    *************************************
@@ -125,7 +125,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    ACTIONS.on(goods_create, async ({ body, headers }) => {
     try {
 
-      if( headers.validCheck ){
+      if( true ){
+      // if( headers.validCheck ){
 
         const settings = {  model, payload: {
           name: body.name,
@@ -143,7 +144,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'ValidError' );
+        return Promise.reject( { message: 'Validation error!' } );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -185,7 +186,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'Valid/Auth Error' );
+        return Promise.reject( { message: 'Validation/Authorization error!' } );
       }
 
     } catch(error) {
@@ -217,7 +218,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'AuthError' );
+        return Promise.reject( { message: 'Authorization error!' } );
       }
 
     } catch(error) {

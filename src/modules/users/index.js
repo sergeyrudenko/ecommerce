@@ -28,10 +28,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-  //  ROUTER.set('middlewares', {
-  //   usersValidCheck: usersValidCheck(utils),
-  //   usersAuthCheck: usersAuthCheck(ACTIONS)
-  // });
+   ROUTER.set('middlewares', {
+    usersValidCheck: usersValidCheck(utils),
+    // usersAuthCheck: usersAuthCheck(ACTIONS)
+  });
 
   /**
    *************************************
@@ -82,7 +82,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         const settings = { model, payload: {id: params.id} };
         return ACTIONS.send('database.read', settings);
       } else {
-        return Promise.reject( 'AuthError' );
+        return Promise.reject( { message: 'Authorization error!' } );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -154,7 +154,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'Validation error!' );
+        return Promise.reject( { message: 'Validation error!' } );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -192,7 +192,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'Valid/Auth Error' );
+        return Promise.reject( { message: 'Validation/Authorization error!' } );
       }
 
     } catch(error) {
@@ -224,7 +224,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( 'AuthError' );
+        return Promise.reject( { message: 'Authorization error!' } );
       }
 
     } catch(error) {
