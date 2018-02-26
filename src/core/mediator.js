@@ -50,8 +50,6 @@ module.exports = class Mediator {
     */
   send(action = '', payload = {}) {
 
-    console.log(action);
-
     let result = false;
 
     Object.keys(channels).map((_action) => {
@@ -59,6 +57,7 @@ module.exports = class Mediator {
       if (_action.split(action)[0] === '') {
 
         const response = channels[_action](payload);
+
 
         (response && response.then) ? result = response : false;
 

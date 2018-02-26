@@ -1,3 +1,4 @@
+const util = require('util');
 const mongoose = require('mongoose');
 const { credentials } = require('./config.json');
 
@@ -120,8 +121,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    */
   ACTIONS.on('database.delete', ({ model, payload }) => 
   // {
+  //   console.log(util.promisify);
+  //   console.log('model', model);
   //   const create = util.promisify(model.remove);
-  //   return create({ id: payload.id });
+  //   // console.log('create', create({ id: payload.id }));
+  //   return create({ id: payload.id }).catch(error => console.log(error));
   // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);

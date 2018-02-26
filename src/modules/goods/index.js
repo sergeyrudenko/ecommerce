@@ -100,8 +100,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     try {
 
         const settings = { model, payload: {} };
-        // const response = await ACTIONS.send('database.all', settings );
-        return true;
+        const response = await ACTIONS.send('database.all', settings );
+        return response;
 
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -165,7 +165,6 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       // if(headers.validCheck && headers.authCheck){
 
         const settings = {  model, payload: { ...body, id: params.id } };
-        console.log(settings.payload);
         const response = await ACTIONS.send('database.update', settings );
         return response;
 

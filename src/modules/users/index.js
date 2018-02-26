@@ -81,7 +81,9 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       if(true){
       // if(headers.authCheck){
         const settings = { model, payload: { id: params.id } };
-        return await ACTIONS.send('database.read', settings);
+        const response =  await ACTIONS.send('database.read', settings);
+        return response;
+
       } else {
         return Promise.reject( { message: 'Authorization error!' } );
       }
@@ -112,11 +114,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       if(true){
 
         const settings = { model, payload: {} };
-        // const response = await ACTIONS.send('database.all', settings);
-        return true;
+        const response = await ACTIONS.send('database.all', settings);
+        return response;
 
       } else {
-        return Promise.reject( 'AuthErrorALL' );
+        return Promise.reject( { message: 'Validation error!' } );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -139,7 +141,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    ACTIONS.on(users_create, async ({ body, headers }) => {
     try {
 
-      if( headers.validCheck ){
+      if( true ){
+      // if( headers.validCheck ){
 
       const settings = { model, payload: {
         ...body,
@@ -211,7 +214,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       // if( headers.authCheck ){
 
         const settings = { model, payload: { id: params.id } };
-        const response = await ACTIONS.send('database.delete', );
+        const response = await ACTIONS.send('database.delete', settings);
         return response;
 
       } else {
