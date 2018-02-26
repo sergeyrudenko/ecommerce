@@ -16,7 +16,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
            goods_create,
            goods_update,
            goods_delete,
-           goods_getAll } = utils.convertkeysToDots(routes);
+           goods_all } = utils.convertkeysToDots(routes);
     /**
    ***************************
    * SET MIDDLEWARES *
@@ -26,7 +26,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-   ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
+   // ROUTER.set('middlewares', { goodsValidCheck: goodsValidCheck(utils) });
 
   /**
    *************************************
@@ -96,7 +96,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @return {promise} - success response or error
    */
 
-  ACTIONS.on(goods_getAll, async ({ params, headers }) => {
+  ACTIONS.on(goods_all, async ({ params, headers }) => {
     try {
 
         const settings = { model, payload: {} };
@@ -168,20 +168,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(goods_update, async ({ params, body, headers }) => {
     try {
 
-      if(headers.validCheck && headers.authCheck){
+      if(true){
+      // if(headers.validCheck && headers.authCheck){
 
-       const settings = {  model, payload: {
-          name: body.name,
-          price: body.price,
-          id: body.id,
-          description: body.description,
-          characteristics: body.characteristics,
-          sale: body.sale,
-          gift: body.gift,
-          rating: body.rating,
-          reviews: body.reviews,
-          customFields: body.customFields,
-        }};
+        const settings = {  model, payload: { ...body } };
+        console.log(settings.payload);
         const response = await ACTIONS.send('database.update', settings );
         return response;
 
@@ -211,7 +202,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(goods_delete, async ({ params, headers }) => {
     try {
 
-      if( headers.authCheck ){
+      if( true ){
+      // if( headers.authCheck ){
 
         const settings = { model, payload: { id: params.id } };
         const response = await ACTIONS.send('database.delete', settings );

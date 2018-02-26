@@ -135,9 +135,10 @@ module.exports = ({ ACTIONS, ROUTER }) => {
 
     app.use((error, req, res, next) => {
 
-      console.log(809080);
+      console.log(error.message);
 
     });
+    return Promise.resolve();
 
   });
 
