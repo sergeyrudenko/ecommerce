@@ -91,7 +91,7 @@ const APP = {
       const message = `${process.pid} is die! | Memory: ${this.startMemory}%`;
 
       this.show.error(message, err.stack);
-      this.ACTIONS.send(`${CONFIG.sms_service}.send`, { body: message });
+      // this.ACTIONS.send(`${CONFIG.sms_service}.send`, { body: message });
 
       setTimeout(() => process.exit(1), 1000);
 

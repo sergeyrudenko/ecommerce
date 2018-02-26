@@ -12,11 +12,23 @@ module.exports = ({ ACTIONS, utils }) => {
     body = 'don\'t forget the message!',
   }) => {
 
-    return new Promise((resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
 
-      const response = utils.callbackToPromise(resolve, reject);
+      try {
 
-      client.messages.create({ to, from, body }, response);
+        // const response = utils.callbackToPromise(resolve, reject);
+
+        await client.messages.create({ to, from, body }, () => {
+          
+        });
+
+      } catch (error) {
+
+        console.log(error.message)
+
+      }
+
+      
 
     });
 

@@ -15,7 +15,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.create', ({ model, payload }) =>
+  ACTIONS.on('database.create', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.create);
+  //   return create(payload);
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 
@@ -33,7 +37,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.count', ({ model, payload }) =>
+  ACTIONS.on('database.count', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.count);
+  //   return create(payload);
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 
@@ -50,7 +58,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.read', ({ model, payload }) =>
+  ACTIONS.on('database.read', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.findOne);
+  //   return create(payload);
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 
@@ -66,7 +78,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.readAll', ({ model, payload }) =>
+  ACTIONS.on('database.all', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.find);
+  //   return create(payload);
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 
@@ -82,7 +98,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.update', ({ model, payload }) =>
+  ACTIONS.on('database.update', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.findOneAndUpdate);
+  //   return create({id: payload.id}, payload, {new: true});
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 
@@ -98,7 +118,11 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    * @param  {object} payload - entity data
    * @return {promise} - success response or error
    */
-  ACTIONS.on('database.delete', ({ model, payload }) =>
+  ACTIONS.on('database.delete', ({ model, payload }) => 
+  // {
+  //   const create = util.promisify(model.remove);
+  //   return create({ id: payload.id });
+  // });
     new Promise((resolve, reject) => {
       const response = utils.callbackToPromise(resolve, reject);
 

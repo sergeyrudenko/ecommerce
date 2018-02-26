@@ -50,6 +50,8 @@ module.exports = class Mediator {
     */
   send(action = '', payload = {}) {
 
+    console.log(action);
+
     let result = false;
 
     Object.keys(channels).map((_action) => {
@@ -64,7 +66,9 @@ module.exports = class Mediator {
 
     });
 
+
     (!result) ? result = Promise.reject(`not handled action ${action}`) : false;
+
 
     return result;
 

@@ -13,16 +13,20 @@ module.exports = (ACTIONS) =>{
             };
             ACTIONS.send('database.read', settings)
                 .then((response)=>{
+
                     if (( (response || {}).success || [])[0]) {
 
                         req.headers.authCheck = true;
                         next();
 
                     }
+
                 })
                 .catch((error)=>{
+
                     console.log(error, 'err auth');
                     res.send(error.massage);
+
                 });
             // if (( (response || {}).success || [])[0]) {
 

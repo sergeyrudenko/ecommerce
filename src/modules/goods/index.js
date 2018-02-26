@@ -100,8 +100,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
     try {
 
         const settings = { model, payload: {} };
-        const response = await ACTIONS.send('database.readAll', settings );
-        return response;
+        // const response = await ACTIONS.send('database.all', settings );
+        return true;
 
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -129,17 +129,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       // if( headers.validCheck ){
 
         const settings = {  model, payload: {
-          name: body.name,
-          price: body.price,
-          id: uuid(),
-          description: body.description,
-          characteristics: body.characteristics,
-          sale: body.sale,
-          gift: body.gift,
-          rating: body.rating,
-          reviews: body.reviews,
-          customFields: body.customFields,
-        }};
+        ...body,
+        id: uuid(),
+        token: uuid(),
+         }};
         const response = await ACTIONS.send('database.create', settings );
         return response;
 
@@ -171,7 +164,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       if(true){
       // if(headers.validCheck && headers.authCheck){
 
-        const settings = {  model, payload: { ...body } };
+        const settings = {  model, payload: { ...body, id: params.id } };
         console.log(settings.payload);
         const response = await ACTIONS.send('database.update', settings );
         return response;

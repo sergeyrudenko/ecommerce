@@ -80,7 +80,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
 
       if(true){
       // if(headers.authCheck){
-        const settings = { model, payload: {id: params.id} };
+        const settings = { model, payload: { id: params.id } };
         return await ACTIONS.send('database.read', settings);
       } else {
         return Promise.reject( { message: 'Authorization error!' } );
@@ -112,8 +112,8 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       if(true){
 
         const settings = { model, payload: {} };
-        const response = await ACTIONS.send('database.readAll', settings);
-        return response;
+        // const response = await ACTIONS.send('database.all', settings);
+        return true;
 
       } else {
         return Promise.reject( 'AuthErrorALL' );
@@ -142,14 +142,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       if( headers.validCheck ){
 
       const settings = { model, payload: {
-          login: body.login,
-          password: body.password,
-          email: body.email,
-          permissions: body.permissions,
-          id: uuid(),
-          token: uuid()
-        }
-      };
+        ...body,
+        id: uuid(),
+        token: uuid(),
+         }};
         const response = await ACTIONS.send('database.create', settings);
         return response;
 
@@ -181,14 +177,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
       // if(headers.validCheck && headers.authCheck){
       if(true){
 
-        const settings = { model, payload: {
-          id: params.id,
-          login: body.login,
-          password: body.password,
-          email: body.email,
-          permissions: body.permissions
-          }
-        };
+        const settings = { model, payload: { ...body, id: params.id } };
         const response = await ACTIONS.send('database.update', settings);
         return response;
 
