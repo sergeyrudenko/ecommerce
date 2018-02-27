@@ -28,10 +28,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    *
    * ROUTER.set('middlewares', { firstMidleware, secondMidleware });
    */
-  //  ROUTER.set('middlewares', {
-  //   usersValidCheck: usersValidCheck(utils),
-  //   usersAuthCheck: usersAuthCheck(ACTIONS)
-  // });
+   ROUTER.set('middlewares', {
+    usersValidCheck: usersValidCheck(utils),
+    usersAuthCheck: usersAuthCheck(ACTIONS)
+  });
 
   /**
    *************************************
@@ -78,22 +78,15 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(users_get, async ({ params, headers }) => {
     try {
 
-      if(true){
-      // if(headers.authCheck){
         const settings = { model, payload: { id: params.id } };
         const response =  await ACTIONS.send('database.read', settings);
         return response;
 
-      } else {
-        return Promise.reject( { message: 'Authorization error!' } );
-      }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
 
-
   });
-
 
   /**
    ************************************
@@ -110,16 +103,10 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(users_all, async ({ params, headers }) => {
     try {
 
-      // if(headers.authCheck){
-      if(true){
-
         const settings = { model, payload: {} };
         const response = await ACTIONS.send('database.all', settings);
         return response;
 
-      } else {
-        return Promise.reject( { message: 'Validation error!' } );
-      }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
     }
@@ -141,8 +128,7 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
    ACTIONS.on(users_create, async ({ body, headers }) => {
     try {
 
-      if( true ){
-      // if( headers.validCheck ){
+      if( !headers.validation ){
 
       const settings = { model, payload: {
         ...body,
@@ -153,7 +139,9 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
         return response;
 
       } else {
-        return Promise.reject( { message: 'Validation error!' } );
+        return Promise.reject( {
+          message: `Validation error on field ${headers.validation.name}`
+        } );
       }
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })
@@ -177,15 +165,16 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(users_update, async ({ params, body, headers }) => {
     try {
 
-      // if(headers.validCheck && headers.authCheck){
-      if(true){
+      if( !headers.validation ){
 
         const settings = { model, payload: { ...body, id: params.id } };
         const response = await ACTIONS.send('database.update', settings);
         return response;
 
       } else {
-        return Promise.reject( { message: 'Validation/Authorization error!' } );
+         return Promise.reject( {
+          message: `Validation error on field ${headers.validation.name}`
+        } );
       }
 
     } catch(error) {
@@ -210,16 +199,9 @@ module.exports = ({ ACTIONS, ROUTER, utils }) => {
   ACTIONS.on(users_delete, async ({ params, headers }) => {
     try {
 
-      if( true ){
-      // if( headers.authCheck ){
-
         const settings = { model, payload: { id: params.id } };
         const response = await ACTIONS.send('database.delete', settings);
         return response;
-
-      } else {
-        return Promise.reject( { message: 'Authorization error!' } );
-      }
 
     } catch(error) {
       Promise.reject({ details: error.message, code: 101 })

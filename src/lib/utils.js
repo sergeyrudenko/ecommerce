@@ -34,19 +34,25 @@ const _callbackToPromise = (resolve = () => {}, reject = () => {}) => {
 };
 
 /**
- * Method for compact transfer callback response
- * to returned promise
+ * Method for validate fields from body
+ * return obj with unvalidated field or false if succes
  * @param  {object} testF - filds to be checked
  * @param  {array} fields - filds for check
- * @return {boolean} - false if success or name of failed body field
+ * @param  {string} method - req method
+ * @return {object} - false if success or object with name of failed body field
  */
-const _validateFields = (testF, fields) => {
+const _validateFields = (testF, fields, method) => {
 
- return !fields.some((field) => {
 
+  const response = fields.filter( (field) => {
+
+    if ( method == 'POST' && testF[field.name] == undefined ) return true;
+    if ( method == 'PUT' && testF[field.name] == undefined ) return false;
     return !field.mask.test(testF[field.name]);
 
+
   });
+ return response[0];
 
 };
 

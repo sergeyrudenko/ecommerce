@@ -1,4 +1,3 @@
-
 module.exports = (utils) => {
 
   return (req, res, next) => {
@@ -8,14 +7,18 @@ module.exports = (utils) => {
 
       const fields = [
         { name: 'login', mask: /^[a-z0-9_-]{5,15}$/g },
-        { name: 'password', mask: /^[A-Za-z0-9_-]{8,15}$/g },
-        { name: 'email', mask: /[a-z0-9_-]+\@[a-z0-9_-]+\.[a-z]+/g },
+        { name: 'password', mask: /^[A-Za-z0-9_-]{8,25}$/g },
+        {
+          name: 'email',
+          mask: /^[a-zA-Z0-9_-]{3,34}\@[a-z0-9]{2,6}\.[a-z0-9]{1,4}$/g,
+        },
       ];
-      req.headers.validCheck = utils.validateFields(req.body, fields);
+
+    req.headers.validation = utils.validateFields(req.body, fields, req.method);
 
     }
+
     next();
-    return req.headers.validCheck;
 
   };
 

@@ -9,11 +9,11 @@ module.exports = (utils) => {
         { name: 'price', mask: /^[0-9.,]{1,10}$/g },
         { name: 'name', mask: /^[ A-Za-z0-9.,/_-]{3,45}$/g },
       ];
-      req.headers.validCheck = utils.validateFields(req.body, fields);
+
+    req.headers.validation = utils.validateFields(req.body, fields, req.method);
 
     }
     next();
-    return req.headers.validCheck;
 
   };
 
